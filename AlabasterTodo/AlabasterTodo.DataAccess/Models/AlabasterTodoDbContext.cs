@@ -5,12 +5,19 @@ namespace AlabasterTodo.DataAccess.Models
 {
     public class AlabasterTodoDbContext : DbContext
     {
+        public AlabasterTodoDbContext(DbContextOptions options) : base(options)
+        {
+        }
+
         public DbSet<User> Users { get; set; }
         public DbSet<TodoItem> TodoItems { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(GetConnectionString());
+            if(!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(GetConnectionString());
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -21,7 +28,7 @@ namespace AlabasterTodo.DataAccess.Models
         private string GetConnectionString()
         {
             string c = Directory.GetCurrentDirectory();
-            IConfigurationRoot configuration = new ConfigurationBuilder().SetBasePath(c).AddJsonFile("appsettings.json").Build();
+            IConfigurationRoot configuration = new ConfigurationBuilder().SetBasePath(c).AddJsonFile("\\AlabasterTodo\\AlabasterTodo.DataAccess\\appsettings.json").Build();
             string? connectionStringIs = configuration.GetConnectionString("AlabasterTodo");
             if (connectionStringIs != null)
             {
