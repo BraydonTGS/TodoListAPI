@@ -14,15 +14,10 @@ namespace AlabasterTodo.DataAccess.Tests
         {
             var options = new DbContextOptionsBuilder<AlabasterTodoDbContext>().UseInMemoryDatabase(databaseName: "AlabasterTodo").Options;
             _context = new AlabasterTodoDbContext(options);
-            foreach (var todo in SeedDbWithMockData())
-            {
-                _context.Add(todo);
-            }
-            _context.SaveChanges();
+            SeedDbWithMockTodoItems(_context);
             _repository = new TodoItemRepository(_context);
 
         }
-
 
         [TestMethod]
         public async Task ReturnAllTodoItemsInCollectionAsync()
@@ -32,7 +27,18 @@ namespace AlabasterTodo.DataAccess.Tests
 
         }
 
-        private static List<TodoItem> SeedDbWithMockData()
+        #region Mock Data
+        private static void SeedDbWithMockTodoItems(AlabasterTodoDbContext context)
+        {
+            var dataToSeed = GenertateMockTodoItems();
+            foreach (var todo in dataToSeed)
+            {
+                context.Add(todo);
+            }
+            context.SaveChanges();
+        }
+
+        private static List<TodoItem> GenertateMockTodoItems()
         {
             var newTodoCollection = new List<TodoItem>()
             {
@@ -68,8 +74,10 @@ namespace AlabasterTodo.DataAccess.Tests
                 }
             };
 
-            return newTodoCollection;   
+            return newTodoCollection;
 
         }
+        #endregion
+
     }
 }

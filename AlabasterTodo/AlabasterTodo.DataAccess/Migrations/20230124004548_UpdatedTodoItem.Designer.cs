@@ -4,6 +4,7 @@ using AlabasterTodo.DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AlabasterTodo.DataAccess.Migrations
 {
     [DbContext(typeof(AlabasterTodoDbContext))]
-    partial class AlabasterTodoDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230124004548_UpdatedTodoItem")]
+    partial class UpdatedTodoItem
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
