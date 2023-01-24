@@ -11,8 +11,7 @@ namespace AlabasterTodo.DataAccess.Models
         [Required]
         public DateTime DateCreated { get; set; }
 
-        [Required]
-        public DateTime DateCompleted { get; set; }
+        public DateTime? DateCompleted { get; set; }
 
         [Required, NotNull]
         public string Description { get; set; } = string.Empty;

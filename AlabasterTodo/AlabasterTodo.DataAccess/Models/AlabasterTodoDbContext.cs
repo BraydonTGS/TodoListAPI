@@ -28,7 +28,7 @@ namespace AlabasterTodo.DataAccess.Models
         private string GetConnectionString()
         {
             string c = Directory.GetCurrentDirectory();
-            IConfigurationRoot configuration = new ConfigurationBuilder().SetBasePath(c).AddJsonFile("\\AlabasterTodo\\AlabasterTodo.DataAccess\\appsettings.json").Build();
+            IConfigurationRoot configuration = new ConfigurationBuilder().SetBasePath(c).AddJsonFile("C:\\Users\\brayd\\Documents\\repos\\XamarinTodoApplication\\AlabasterTodo\\AlabasterTodo.DataAccess\\appsettings.json").Build();
             string? connectionStringIs = configuration.GetConnectionString("AlabasterTodo");
             if (connectionStringIs != null)
             {
