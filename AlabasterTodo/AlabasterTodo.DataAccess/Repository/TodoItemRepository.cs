@@ -34,7 +34,14 @@ namespace AlabasterTodo.DataAccess.Repository
 
         public async Task<TodoItem>? GetTodoItemByIdAsync(int Id)
         {
-            throw new NotImplementedException();
+            var todoItem = await _dbContext.TodoItems.FirstOrDefaultAsync(x => x.Id == Id);
+
+            if (todoItem != null)
+            {
+                return todoItem;
+
+            }
+            return null;
         }
 
         public async Task<TodoItem>? UpdateTodoItemAsync(TodoItem item)
