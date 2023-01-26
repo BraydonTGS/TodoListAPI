@@ -42,11 +42,22 @@ namespace AlabasterTodo.DataAccess.Tests
 
             Assert.AreEqual(3, sut?.Count());
         }
+
         [TestMethod]
         public async Task GetTodoItemByIdandNotReturnNull()
         {
-            TodoItem sut = await _repository.GetTodoItemByIdAsync(1);
+            var sut = await _repository.GetTodoItemByIdAsync(1);
             Assert.IsNotNull(sut);
+        }
+        [TestMethod]
+        public async Task GetTodoItemByIdReturnsCorrectTodoItem()
+        {
+            var sut = await _repository.GetTodoItemByIdAsync(1); 
+            Assert.AreEqual(sut.Id, 1);
+            Assert.AreEqual(sut.Description, "Take out the trash");
+            Assert.AreEqual(sut.IsCompleted, false);
+            Assert.AreEqual(sut.IsDeleted, false);
+
         }
         #region Mock Data
         private static void SeedDbWithMockTodoItems(AlabasterTodoDbContext context)

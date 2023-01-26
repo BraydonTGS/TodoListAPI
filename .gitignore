@@ -362,3 +362,4 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /AlabasterTodo/AlabasterTodo.DataAccess/appsettings.json
+/AlabasterTodo/AlabasterTodo.Api/appsettings.json
