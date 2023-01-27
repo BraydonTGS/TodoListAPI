@@ -14,36 +14,39 @@ namespace AlabasterTodo.Api.Controllers
         {
             _repository = repository;
         }
-        // GET: api/<TodoItemController>
+       
         [HttpGet]
         public IEnumerable<TodoItem> Get()
         {
             return _repository.GetAllTodoItemsAsync().Result;
         }
 
-        // GET api/<TodoItemController>/5
+        
         [HttpGet("{id}")]
-        public string Get(int id)
+        public TodoItem Get(int id)
         {
-            return "value";
+            return _repository.GetTodoItemByIdAsync(id).Result;
         }
 
-        // POST api/<TodoItemController>
+        
         [HttpPost]
-        public void Post([FromBody] string value)
+        public TodoItem Post([FromBody] TodoItem todo)
         {
+            return _repository.CreateNewTodoItemAsync(todo).Result;
         }
 
-        // PUT api/<TodoItemController>/5
+        
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public TodoItem Put(int id, [FromBody] TodoItem todo)
         {
+            return _repository.UpdateTodoItemAsync(id, todo).Result;    
         }
 
-        // DELETE api/<TodoItemController>/5
+        
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public bool Delete(int id)
         {
+            return _repository.DeleteTodoItemAsync(id).Result;  
         }
     }
 }
