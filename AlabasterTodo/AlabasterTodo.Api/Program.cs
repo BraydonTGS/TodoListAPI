@@ -1,6 +1,7 @@
 using AlabasterTodo.DataAccess.Interfaces;
 using AlabasterTodo.DataAccess.Models;
 using AlabasterTodo.DataAccess.Repository;
+using Microsoft.EntityFrameworkCore;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -8,10 +9,14 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers().AddJsonOptions(x =>
                 x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
 // Database Context //
-builder.Services.AddDbContext<AlabasterTodoDbContext>();
+builder.Services.AddDbContext<AlabasterTodoDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("AlabasterTodo"));
+});
 
 // Dependency Injection //
 builder.Services.AddScoped<ITodoItemRepository, TodoItemRepository>();
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
