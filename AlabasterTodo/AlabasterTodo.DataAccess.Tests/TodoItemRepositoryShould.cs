@@ -23,6 +23,7 @@ namespace AlabasterTodo.DataAccess.Tests
         public void TestCleanup()
         {
             _context.Database.EnsureDeleted(); // Remove from memory
+
             _context.Dispose();
         }
 
@@ -30,6 +31,7 @@ namespace AlabasterTodo.DataAccess.Tests
         public async Task ReturnTodoItemsInCollectionNotNullAsync()
         {
             var sut = await _repository.GetAllTodoItemsAsync();
+
             Assert.IsNotNull(sut);
         }
 
@@ -52,6 +54,7 @@ namespace AlabasterTodo.DataAccess.Tests
         public async Task GetTodoItemByIdReturnsCorrectTodoItem()
         {
             var sut = await _repository.GetTodoItemByIdAsync(1);
+
             Assert.AreEqual(sut.Id, 1);
             Assert.AreEqual(sut.Description, "Take out the trash");
             Assert.AreEqual(sut.IsCompleted, false);
@@ -69,7 +72,38 @@ namespace AlabasterTodo.DataAccess.Tests
             Assert.IsNotNull(sut);
         }
 
+        [TestMethod]
+        public async Task CreateNewTodoItemandReturnsTodoItem()
+        {
+            var todo = GenerateSingleTodoItem();
 
+            var sut = await _repository.CreateNewTodoItemAsync(todo); 
+
+            Assert.AreEqual(sut.Id, 4);
+            Assert.AreEqual(sut.Description, "Organize the Garage");
+            Assert.AreEqual(sut.IsCompleted, false);
+            Assert.AreEqual(sut.IsDeleted, false); 
+        }
+
+        [TestMethod]
+        public async Task UpdateTodoItemAndNotReturnNull()
+        {
+            var todo = GenerateSingleTodoItemToUpdate();  
+            var sut = await _repository.UpdateTodoItemAsync(todo); 
+
+            Assert.IsNotNull(sut);  
+        }
+
+        [TestMethod]
+        public async Task UpdateTodoItemAndReturnUpdatedValues()
+        {
+            var todo = GenerateSingleTodoItemToUpdate();
+            var sut = await _repository.UpdateTodoItemAsync(todo);
+            Assert.AreEqual(sut.Id, 1);
+            Assert.AreEqual(sut.Description, "Mop the Floors");
+            Assert.AreEqual(sut.IsCompleted, true);
+            Assert.AreEqual(sut.IsDeleted, true);
+        }
 
         #region Mock Data
         private static void SeedDbWithMockTodoItems(AlabasterTodoDbContext context)
@@ -93,7 +127,21 @@ namespace AlabasterTodo.DataAccess.Tests
                 IsDeleted = false,
                 UserId = 1, 
             };
+            return todoItem;
+        }
 
+        private static TodoItem GenerateSingleTodoItemToUpdate()
+        {
+            var todoItem = new TodoItem()
+            {
+                Id= 1,
+                DateCreated = DateTime.Now,
+                DateCompleted = null,
+                Description = "Mop the Floors",
+                IsCompleted = true,
+                IsDeleted = true,
+                UserId = 1,
+            };
             return todoItem;
         }
 

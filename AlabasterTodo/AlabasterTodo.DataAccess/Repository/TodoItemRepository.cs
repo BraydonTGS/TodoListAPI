@@ -12,20 +12,20 @@ namespace AlabasterTodo.DataAccess.Repository
         {
             _dbContext = dbContext;
         }
-        public async Task<TodoItem>? CreateNewTodoItemAsync(TodoItem item)
+        public async Task<TodoItem> CreateNewTodoItemAsync(TodoItem item)
         {
-            await _dbContext.AddAsync(item);
-            await _dbContext.SaveChangesAsync();
+          await  _dbContext.AddAsync(item);
+           await _dbContext.SaveChangesAsync(); 
             return item;
-
+            
         }
 
-        public async Task<bool>? DeleteTodoItemAsync(int id)
+        public async Task<bool> DeleteTodoItemAsync(int id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<IEnumerable<TodoItem>?> GetAllTodoItemsAsync()
+        public async Task<IEnumerable<TodoItem>> GetAllTodoItemsAsync()
         {
             var todoItemList = await _dbContext.TodoItems.ToListAsync();
             if (todoItemList.Any())
@@ -35,7 +35,7 @@ namespace AlabasterTodo.DataAccess.Repository
             return null;
         }
 
-        public async Task<TodoItem>? GetTodoItemByIdAsync(int Id)
+        public async Task<TodoItem> GetTodoItemByIdAsync(int Id)
         {
             var todoItem = await _dbContext.TodoItems.FirstOrDefaultAsync(x => x.Id == Id);
 
@@ -47,9 +47,20 @@ namespace AlabasterTodo.DataAccess.Repository
             return null;
         }
 
-        public async Task<TodoItem>? UpdateTodoItemAsync(TodoItem item)
+        public async Task<TodoItem> UpdateTodoItemAsync(TodoItem item)
         {
-            throw new NotImplementedException();
+            var todoItemToUpdate = await _dbContext.TodoItems.FirstOrDefaultAsync(x =>x.Id == item.Id);
+            if (todoItemToUpdate != null)
+            {
+                todoItemToUpdate.Description = item.Description;
+                todoItemToUpdate.IsCompleted = item.IsCompleted; 
+                todoItemToUpdate.IsDeleted= item.IsDeleted;
+                todoItemToUpdate.IsDeleted= item.IsDeleted;
+
+                return todoItemToUpdate;
+            }
+            return null; 
+
         }
     }
 }
