@@ -105,6 +105,21 @@ namespace AlabasterTodo.DataAccess.Tests
             Assert.AreEqual(sut.IsDeleted, true);
         }
 
+        [TestMethod]
+        public async Task DeleteTodoItemByIdAndNotReturnFalse()
+        {
+            var sut = await _repository.DeleteTodoItemAsync(1); 
+            Assert.IsTrue(sut);
+        }
+
+        [TestMethod]
+        public async Task DeleteTodoItemWithWrongIdReturnsFalse()
+        {
+            var sut = await _repository.DeleteTodoItemAsync(7);
+            Assert.IsFalse(sut); 
+        }
+
+        // Seed DB Methods //
         #region Mock Data
         private static void SeedDbWithMockTodoItems(AlabasterTodoDbContext context)
         {
