@@ -14,4 +14,8 @@
     <Folder Include="Controllers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AlabasterTodo.DataAccess\AlabasterTodo.DataAccess.csproj" />
+  </ItemGroup>
+
 </Project>

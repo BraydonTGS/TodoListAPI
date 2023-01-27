@@ -12,6 +12,7 @@ namespace AlabasterTodo.DataAccess.Repository
         {
             _dbContext = dbContext;
         }
+
         public async Task<TodoItem> CreateNewTodoItemAsync(TodoItem item)
         {
             await _dbContext.AddAsync(item);
@@ -34,7 +35,7 @@ namespace AlabasterTodo.DataAccess.Repository
 
         public async Task<IEnumerable<TodoItem>> GetAllTodoItemsAsync()
         {
-            var todoItemList = await _dbContext.TodoItems.ToListAsync();
+            var todoItemList = await _dbContext.TodoItems.Include(x => x.User).ToListAsync();
             if (todoItemList.Any())
             {
                 return todoItemList;
@@ -54,9 +55,9 @@ namespace AlabasterTodo.DataAccess.Repository
             return null;
         }
 
-        public async Task<TodoItem> UpdateTodoItemAsync(TodoItem item)
+        public async Task<TodoItem> UpdateTodoItemAsync(int id, TodoItem item)
         {
-            var todoItemToUpdate = await _dbContext.TodoItems.FirstOrDefaultAsync(x => x.Id == item.Id);
+            var todoItemToUpdate = await _dbContext.TodoItems.FirstOrDefaultAsync(x => x.Id == id);
             if (todoItemToUpdate != null)
             {
                 todoItemToUpdate.Description = item.Description;

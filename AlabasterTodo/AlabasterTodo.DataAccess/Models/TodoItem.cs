@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace AlabasterTodo.DataAccess.Models
 {
@@ -19,9 +20,9 @@ namespace AlabasterTodo.DataAccess.Models
         public bool IsDeleted { get; set; }
         [Required]
         public bool IsCompleted { get; set; }
-        
+   
         public int UserId { get; set; }
-
+      
         public User User { get; set; }
     }
 }

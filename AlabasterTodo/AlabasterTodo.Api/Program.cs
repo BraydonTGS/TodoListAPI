@@ -1,9 +1,17 @@
+using AlabasterTodo.DataAccess.Interfaces;
+using AlabasterTodo.DataAccess.Models;
+using AlabasterTodo.DataAccess.Repository;
+using System.Text.Json.Serialization;
+
 var builder = WebApplication.CreateBuilder(args);
+// Ignore Json Cycles //
+builder.Services.AddControllers().AddJsonOptions(x =>
+                x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+// Database Context //
+builder.Services.AddDbContext<AlabasterTodoDbContext>();
 
-// Add services to the container.
-
-builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Dependency Injection //
+builder.Services.AddScoped<ITodoItemRepository, TodoItemRepository>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 var app = builder.Build();
