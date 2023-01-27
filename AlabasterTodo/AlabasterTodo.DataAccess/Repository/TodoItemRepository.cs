@@ -12,9 +12,12 @@ namespace AlabasterTodo.DataAccess.Repository
         {
             _dbContext = dbContext;
         }
-        public async Task<TodoItem>? CreateNewTodoItem(TodoItem item)
+        public async Task<TodoItem>? CreateNewTodoItemAsync(TodoItem item)
         {
-            throw new NotImplementedException();
+            await _dbContext.AddAsync(item);
+            await _dbContext.SaveChangesAsync();
+            return item;
+
         }
 
         public async Task<bool>? DeleteTodoItemAsync(int id)

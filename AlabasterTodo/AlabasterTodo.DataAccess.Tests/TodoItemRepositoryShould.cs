@@ -1,7 +1,6 @@
 ﻿using AlabasterTodo.DataAccess.Models;
 using AlabasterTodo.DataAccess.Repository;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Storage;
 
 namespace AlabasterTodo.DataAccess.Tests
 {
@@ -32,7 +31,6 @@ namespace AlabasterTodo.DataAccess.Tests
         {
             var sut = await _repository.GetAllTodoItemsAsync();
             Assert.IsNotNull(sut);
-
         }
 
         [TestMethod]
@@ -49,16 +47,30 @@ namespace AlabasterTodo.DataAccess.Tests
             var sut = await _repository.GetTodoItemByIdAsync(1);
             Assert.IsNotNull(sut);
         }
+
         [TestMethod]
         public async Task GetTodoItemByIdReturnsCorrectTodoItem()
         {
-            var sut = await _repository.GetTodoItemByIdAsync(1); 
+            var sut = await _repository.GetTodoItemByIdAsync(1);
             Assert.AreEqual(sut.Id, 1);
             Assert.AreEqual(sut.Description, "Take out the trash");
             Assert.AreEqual(sut.IsCompleted, false);
             Assert.AreEqual(sut.IsDeleted, false);
 
         }
+
+        [TestMethod]
+        public async Task CreateNewTodoItemandNotReturnNull()
+        {
+            var todo = GenerateSingleTodoItem();
+
+            var sut = await _repository.CreateNewTodoItemAsync(todo);
+
+            Assert.IsNotNull(sut);
+        }
+
+
+
         #region Mock Data
         private static void SeedDbWithMockTodoItems(AlabasterTodoDbContext context)
         {
@@ -68,6 +80,21 @@ namespace AlabasterTodo.DataAccess.Tests
                 context.Add(todo);
             }
             context.SaveChanges();
+        }
+
+        private static TodoItem GenerateSingleTodoItem()
+        {
+            var todoItem = new TodoItem()
+            {
+                DateCreated = DateTime.Now,
+                DateCompleted = null,
+                Description = "Organize the Garage", 
+                IsCompleted = false,
+                IsDeleted = false,
+                UserId = 1, 
+            };
+
+            return todoItem;
         }
 
         private static List<TodoItem> GenertateMockTodoItems()
