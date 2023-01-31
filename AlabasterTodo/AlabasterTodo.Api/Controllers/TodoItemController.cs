@@ -1,6 +1,7 @@
 ﻿using AlabasterTodo.DataAccess.Interfaces;
 using AlabasterTodo.DataAccess.Models;
 using AlabasterTodo.Domain.Models.Request;
+using AlabasterTodo.Domain.Models.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlabasterTodo.Api.Controllers
@@ -17,9 +18,24 @@ namespace AlabasterTodo.Api.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<TodoItem> Get()
+        public async Task<IActionResult> Get()
         {
-            return _repository.GetAllTodoItemsAsync().Result;
+            var todoItemResponseCollection = new List<TodoItemResponse>();
+            var todoItems = await _repository.GetAllTodoItemsAsync();
+            foreach (var todoItem in todoItems)
+            {
+               var todoItemResponse = new TodoItemResponse()
+                {
+                    Description = todoItem.Description,
+                    DateCreated = todoItem.DateCreated,
+                    DateCompleted = todoItem.DateCompleted,
+                    IsDeleted = todoItem.IsDeleted,
+                    IsCompleted = todoItem.IsCompleted,
+                    UserId = todoItem.UserId
+                };
+                todoItemResponseCollection.Add(todoItemResponse);
+            }
+            return Ok(todoItemResponseCollection);
         }
 
 
@@ -37,7 +53,8 @@ namespace AlabasterTodo.Api.Controllers
             {
                 return BadRequest();
             }
-            var todo = new TodoItem()
+
+            var newTodo = new TodoItem()
             {
                 Description = todoRequest.Description,
                 DateCreated = todoRequest.DateCreated,
@@ -45,10 +62,19 @@ namespace AlabasterTodo.Api.Controllers
                 IsDeleted = todoRequest.IsDeleted,
                 IsCompleted = todoRequest.IsCompleted,
                 UserId = todoRequest.UserId,
-                User = todoRequest.User
-
             };
-            var todoResponse = _repository.CreateNewTodoItemAsync(todo).Result;
+
+            var response = _repository.CreateNewTodoItemAsync(newTodo).Result;
+
+            var todoResponse = new TodoItemResponse()
+            {
+                Description = response.Description,
+                DateCreated = response.DateCreated,
+                DateCompleted = response.DateCompleted,
+                IsDeleted = response.IsDeleted,
+                IsCompleted = response.IsCompleted,
+                UserId =    response.UserId,
+            };
 
             return Ok(todoResponse);
 
@@ -56,7 +82,7 @@ namespace AlabasterTodo.Api.Controllers
 
 
         [HttpPut("{id}")]
-        public TodoItem Put(int id, [FromBody] TodoItem todo)
+        public TodoItem Put([FromRoute] int id, [FromBody] TodoItem todo)
         {
             return _repository.UpdateTodoItemAsync(id, todo).Result;
         }

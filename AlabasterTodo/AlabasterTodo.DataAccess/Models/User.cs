@@ -1,4 +1,6 @@
-﻿namespace AlabasterTodo.DataAccess.Models
+﻿using System.Runtime.Serialization;
+
+namespace AlabasterTodo.DataAccess.Models
 {
     public class User
     {

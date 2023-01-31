@@ -16,6 +16,7 @@ namespace AlabasterTodo.DataAccess.Models
         {
             modelBuilder.Entity<TodoItem>().HasOne<User>(u => u.User).WithMany(t => t.TodoItems).HasForeignKey(u => u.UserId);
         }
+
     }
 }
 
