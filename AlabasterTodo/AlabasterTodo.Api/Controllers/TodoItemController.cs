@@ -1,5 +1,6 @@
 ﻿using AlabasterTodo.DataAccess.Interfaces;
 using AlabasterTodo.DataAccess.Models;
+using AlabasterTodo.Domain.Models.Request;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AlabasterTodo.Api.Controllers
@@ -14,39 +15,57 @@ namespace AlabasterTodo.Api.Controllers
         {
             _repository = repository;
         }
-       
+
         [HttpGet]
         public IEnumerable<TodoItem> Get()
         {
             return _repository.GetAllTodoItemsAsync().Result;
         }
 
-        
+
         [HttpGet("{id}")]
         public TodoItem Get(int id)
         {
             return _repository.GetTodoItemByIdAsync(id).Result;
         }
 
-        
+
         [HttpPost]
-        public TodoItem Post([FromBody] TodoItem todo)
+        public async Task<IActionResult> Post([FromBody] TodoItemRequest todoRequest)
         {
-            return _repository.CreateNewTodoItemAsync(todo).Result;
+            if (todoRequest == null)
+            {
+                return BadRequest();
+            }
+            var todo = new TodoItem()
+            {
+                Description = todoRequest.Description,
+                DateCreated = todoRequest.DateCreated,
+                DateCompleted = todoRequest.DateCompleted,
+                IsDeleted = todoRequest.IsDeleted,
+                IsCompleted = todoRequest.IsCompleted,
+                UserId = todoRequest.UserId,
+                User = todoRequest.User
+
+            };
+            var todoResponse = _repository.CreateNewTodoItemAsync(todo).Result;
+
+            return Ok(todoResponse);
+
         }
 
-        
+
         [HttpPut("{id}")]
         public TodoItem Put(int id, [FromBody] TodoItem todo)
         {
-            return _repository.UpdateTodoItemAsync(id, todo).Result;    
+            return _repository.UpdateTodoItemAsync(id, todo).Result;
         }
 
-        
+
         [HttpDelete("{id}")]
         public bool Delete(int id)
         {
-            return _repository.DeleteTodoItemAsync(id).Result;  
+            return _repository.DeleteTodoItemAsync(id).Result;
         }
     }
 }
